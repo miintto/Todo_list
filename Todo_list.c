@@ -35,7 +35,7 @@ Todo_list*search(Todo_list*head, int *x, int*y) {
 	if (head == NULL) {		// 데이터가 없는 경우
 		return NULL;
 	}
-	else if (p->Start >= *x & p->Run >= *y) {	// 가장 빠른 일정은 맨 앞으로
+	else if (p->Start >= *x && p->Run >= *y) {	// 가장 빠른 일정은 맨 앞으로
 		return NULL;
 	}
 	else{
@@ -50,15 +50,32 @@ Todo_list*search(Todo_list*head, int *x, int*y) {
 	}
 }
 
+void search2 (Todo_list *head, Todo_list **prev, Todo_list **removed, int x) {
+	Todo_list *p1, *p2;
+	p1 = head;
+	p2 = NULL;
+	
+	while (p1 != NULL) {
+		if (p1->Start == x) {// 탐색성공
+			*prev = p2;
+			*removed = p1;
+			return;
+		}
+		p2 = p1;
+		p1 = p1->link;
+	}
+	return; // 탐색실패일경우NULL 반환
+}
+
 void remove_node(Todo_list**phead, Todo_list*p, Todo_list*removed)
 {
-	if (p == NULL)
+	if (p == NULL)					// 지울 노드가 제일 처음 노드일 경우
 		*phead = (*phead)->link;
-	else
+	else {							// 지울 노드가 중간에 끼어있을 경우
+	}
 		p->link = removed->link;
 	free(removed);
 }
-
 
 void display(Todo_list*head) {
 	Todo_list*p = head;
@@ -79,7 +96,6 @@ void display_2(Todo_list*head, int *a) {
 	}
 	printf("\n");
 }
-
 int main()
 {
 	int num;
@@ -97,12 +113,9 @@ int main()
 		scanf("%d", &num);
 		printf("\n\n");
 
-
 		switch (num)
 		{
-
-			case 1:
-			{
+			case 1: {
 				new = (Todo_list*)malloc(sizeof(Todo_list));		// 새 노드 포인터 생성
 				printf("                      1. 일정 입력\n\n");
 				printf("시작시간 : ");
@@ -116,29 +129,25 @@ int main()
 				p = search(phead, &new->Start, &new->Run);		// 삽입될 위치 출력
 				insert_node(&phead, p, new);		// 값 넣기
 
-				printf("\n%d시부터 %d시간동안 일정 %s가 입력되었습니다.\n\n\n\n\n", new->Start, new->Run, &new->Todo);
+				printf("\n%d시부터 %d시간동안 일정 '%s가 입력되었습니다.\n\n\n\n\n", new->Start, new->Run, &new->Todo);
 				break;
 			}
-			case 2:
-			{
+			case 2: {
 				printf("                      2. 일정 삭제\n\n");
 				printf("삭제할 시간 : ");
 				scanf("%d", &num);
 				if (num == -1) {
-					while (phead != NULL) {
-						q = phead;
-						remove_node(&phead, p, q);
-						free(q);
-					}
+					phead = NULL;
 				}
 				else {
+					p = NULL;
+					q = phead;
 					remove_node(&phead, p, new);
 				}
 				printf("\n\n\n\n");
 				break;
 			}
-			case 3:
-			{
+			case 3: {
 				printf("                      3. 일정 검섹\n\n");
 				
 				printf("검섹할 시간 : ");
