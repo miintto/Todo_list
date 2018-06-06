@@ -46,7 +46,7 @@ void insert_node(Node**proot, Node*new) {		////////// 노드 삽입 함수 //////////
 	}
 }
 
-void delete_node(Node**proot, int *num) {		////////// 노드 삭제 함수 //////////
+void delete_node(Node**proot, int num) {		////////// 노드 삭제 함수 //////////
 	Node*p = NULL;
 	Node*q = NULL;
 	Node*r = NULL;
