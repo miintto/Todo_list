@@ -36,7 +36,7 @@ class TkSchedule:
 		label_blk0.grid(row=0, column=0)
 		label_blk1 = Label(self.frame1, text = '', width=5)
 		label_blk1.grid(row=0, column=4)
-		buttun_1 = Button(self.frame1, text = '새로고침', command = self.load_schedule)
+		buttun_1 = Button(self.frame1, text = '새로고침', command = self.clean_all)
 		buttun_1.grid(row=1, column=3)
 
 		style = ttk.Style()
@@ -56,7 +56,7 @@ class TkSchedule:
 
 		buttun_0 = Button(self.frame1, text = '일정완료', command = self.complete_schedule)
 		buttun_0.grid(row=3, column=1)
-		buttun_1 = Button(self.frame1, text = 'info.', command = self.fix_schedule)
+		buttun_1 = Button(self.frame1, text = 'info.', command = self.show_schedule)
 		buttun_1.grid(row=3, column=2)
 		buttun_1 = Button(self.frame1, text = '삭제', command = self.delelte_schedule)
 		buttun_1.grid(row=3, column=3)
@@ -115,10 +115,7 @@ class TkSchedule:
 		new_importance = self.importance.get()
 		memo = self.text_3.get('1.0', "end-1c")
 		model.make_schedule(new_date, new_todo, new_importance, memo).save()
-		new_date = self.deadline.set('')
-		new_todo = self.todo.set('')
-		new_importance = self.importance.set(0)
-		self.text_3.delete('1.0', "end-1c")
+		self.clean_info()
 		self.load_schedule()
 
 
@@ -144,7 +141,19 @@ class TkSchedule:
 			self.Tree.delete(line)
 
 
-	def fix_schedule(self):
+	def clean_info(self):
+		new_date = self.deadline.set('')
+		new_todo = self.todo.set('')
+		new_importance = self.importance.set(0)
+		self.text_3.delete('1.0', "end-1c")
+
+
+	def clean_all(self):
+		self.load_schedule()
+		self.clean_info()
+
+
+	def show_schedule(self):
 		tree_id = self.Tree.selection()
 		selected_obj = self.Tree.item(tree_id)
 		idx = selected_obj['values'][2]
@@ -173,7 +182,7 @@ class TkSchedule:
 		selected_obj = self.Tree.item(tree_id)
 		idx = selected_obj['values'][2]
 		model.delete(idx)
-		self.load_schedule()
+		self.load_schedule() 
 
 
 
